@@ -33,7 +33,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     onAddToCart?.(id);
     toast({
       title: "Added to cart",
@@ -102,10 +104,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
               variant="secondary" 
               size="icon" 
               className="rounded-full shadow-sm bg-white/80 backdrop-blur-sm hover:bg-white"
+              as={Link}
+              to={`/product/${id}`}
+              onClick={(e) => e.stopPropagation()}
             >
-              <Link to={`/product/${id}`}>
-                <Eye size={18} className="text-gray-600" />
-              </Link>
+              <Eye size={18} className="text-gray-600" />
             </Button>
           </div>
           

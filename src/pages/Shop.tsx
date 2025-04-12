@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -8,105 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Check, ChevronDown } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
-
-// Product data (same as in FeaturedProducts)
-const products = [
-  {
-    id: "1",
-    name: "Minimalist Table Lamp",
-    price: 89.99,
-    image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Home Decor",
-    isNew: true
-  },
-  {
-    id: "2",
-    name: "Ergonomic Office Chair",
-    price: 199.99,
-    originalPrice: 249.99,
-    image: "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Furniture",
-    isSale: true
-  },
-  {
-    id: "3",
-    name: "Wireless Bluetooth Speaker",
-    price: 79.99,
-    image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Electronics",
-    isNew: true
-  },
-  {
-    id: "4",
-    name: "Ceramic Coffee Mug",
-    price: 24.99,
-    originalPrice: 29.99,
-    image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Kitchenware",
-    isSale: true
-  },
-  {
-    id: "5",
-    name: "Cotton Throw Pillow",
-    price: 34.99,
-    image: "https://images.unsplash.com/photo-1584208124792-85dcb8d6a8bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Home Decor"
-  },
-  {
-    id: "6",
-    name: "Houseplant Collection",
-    price: 49.99,
-    image: "https://images.unsplash.com/photo-1463320898484-cdee8141c787?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Plants"
-  },
-  {
-    id: "7",
-    name: "Stainless Steel Water Bottle",
-    price: 29.99,
-    originalPrice: 35.99,
-    image: "https://images.unsplash.com/photo-1570367448211-f2d14d4a63b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Kitchen",
-    isSale: true
-  },
-  {
-    id: "8",
-    name: "Scented Soy Candle",
-    price: 19.99,
-    image: "https://images.unsplash.com/photo-1602523069441-c170e5280fce?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Home Decor"
-  },
-  {
-    id: "9",
-    name: "Modern Floor Lamp",
-    price: 129.99,
-    image: "https://images.unsplash.com/photo-1543198126-4a76b52ffd28?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Home Decor",
-    isNew: true
-  },
-  {
-    id: "10",
-    name: "Wooden Cutting Board",
-    price: 42.99,
-    image: "https://images.unsplash.com/photo-1584651766658-1b8e4627586e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Kitchenware"
-  },
-  {
-    id: "11",
-    name: "Decorative Wall Mirror",
-    price: 89.99,
-    originalPrice: 109.99,
-    image: "https://images.unsplash.com/photo-1581149605490-61ef41b8d010?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Home Decor",
-    isSale: true
-  },
-  {
-    id: "12",
-    name: "Smart Thermostat",
-    price: 149.99,
-    image: "https://images.unsplash.com/photo-1596566313761-24d10a108d18?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700",
-    category: "Electronics"
-  }
-];
+import { products } from '@/data/products';
 
 const categories = ["All", "Home Decor", "Furniture", "Electronics", "Kitchenware", "Plants", "Kitchen"];
 

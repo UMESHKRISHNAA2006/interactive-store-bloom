@@ -16,14 +16,14 @@ type CartState = {
 };
 
 type CartAction =
-  | { type: 'ADD_ITEM'; payload: { id: string; name: string; price: number; image: string } }
+  | { type: 'ADD_ITEM'; payload: { id: string; name: string; price: number; image: string; quantity?: number } }
   | { type: 'REMOVE_ITEM'; payload: { id: string } }
   | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
   | { type: 'CLEAR_CART' };
 
 type CartContextType = {
   cartState: CartState;
-  addToCart: (item: { id: string; name: string; price: number; image: string }) => void;
+  addToCart: (item: { id: string; name: string; price: number; image: string; quantity?: number }) => void;
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -45,13 +45,13 @@ const calculateTotals = (items: CartItem[]): { totalItems: number; totalPrice: n
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case 'ADD_ITEM': {
-      const { id, name, price, image } = action.payload;
+      const { id, name, price, image, quantity = 1 } = action.payload;
       const existingItemIndex = state.items.findIndex(item => item.id === id);
       
       if (existingItemIndex >= 0) {
         // Item exists, update quantity
         const updatedItems = [...state.items];
-        updatedItems[existingItemIndex].quantity += 1;
+        updatedItems[existingItemIndex].quantity += quantity;
         
         const { totalItems, totalPrice } = calculateTotals(updatedItems);
         
@@ -68,7 +68,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
           name,
           price,
           image,
-          quantity: 1,
+          quantity,
         };
         
         const updatedItems = [...state.items, newItem];
@@ -129,7 +129,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cartState, dispatch] = useReducer(cartReducer, initialState);
   
-  const addToCart = (item: { id: string; name: string; price: number; image: string }) => {
+  const addToCart = (item: { id: string; name: string; price: number; image: string; quantity?: number }) => {
     dispatch({ type: 'ADD_ITEM', payload: item });
   };
   
