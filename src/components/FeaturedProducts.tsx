@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import ProductCard from './ProductCard';
 import { Button } from './ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '@/context/CartContext';
 
 // Dummy products data
 const products = [
@@ -76,14 +77,19 @@ const categories = ["All", "Home Decor", "Furniture", "Electronics", "Kitchenwar
 
 const FeaturedProducts = () => {
   const [activeCategory, setActiveCategory] = useState("All");
-  const [cartItems, setCartItems] = useState<string[]>([]);
+  const { addToCart } = useCart();
   
   const filteredProducts = activeCategory === "All" 
     ? products 
     : products.filter(product => product.category === activeCategory);
     
-  const handleAddToCart = (id: string) => {
-    setCartItems(prev => [...prev, id]);
+  const handleAddToCart = (product: any) => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image
+    });
   };
 
   return (
@@ -129,7 +135,7 @@ const FeaturedProducts = () => {
               >
                 <ProductCard
                   {...product}
-                  onAddToCart={handleAddToCart}
+                  onAddToCart={() => handleAddToCart(product)}
                 />
               </motion.div>
             ))}

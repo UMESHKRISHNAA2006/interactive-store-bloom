@@ -1,13 +1,20 @@
 
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Menu, X, Search, User, Heart } from 'lucide-react';
+import { ShoppingCart, Menu, X, Search, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
+import SearchModal from './SearchModal';
+import UserMenu from './UserMenu';
+import { useCart } from '@/context/CartContext';
 
-const Navbar = ({ cartItems = [] }: { cartItems?: any[] }) => {
+const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCartAnimating, setIsCartAnimating] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  
+  const { cartState } = useCart();
+  const { items, totalItems } = cartState;
   
   useEffect(() => {
     const handleScroll = () => {
@@ -23,12 +30,12 @@ const Navbar = ({ cartItems = [] }: { cartItems?: any[] }) => {
   }, []);
   
   useEffect(() => {
-    if (cartItems.length > 0) {
+    if (totalItems > 0) {
       setIsCartAnimating(true);
       const timer = setTimeout(() => setIsCartAnimating(false), 300);
       return () => clearTimeout(timer);
     }
-  }, [cartItems]);
+  }, [totalItems]);
 
   return (
     <nav
@@ -61,31 +68,51 @@ const Navbar = ({ cartItems = [] }: { cartItems?: any[] }) => {
 
           {/* Right side icons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" onClick={() => setIsSearchOpen(true)}>
               <Search size={20} className="text-foreground hover:text-mint-500" />
             </Button>
+            
+            <UserMenu />
+            
             <Button variant="ghost" size="icon">
-              <User size={20} className="text-foreground hover:text-mint-500" />
+              <Link to="/wishlist">
+                <Heart size={20} className="text-foreground hover:text-mint-500" />
+              </Link>
             </Button>
-            <Button variant="ghost" size="icon">
-              <Heart size={20} className="text-foreground hover:text-mint-500" />
-            </Button>
+            
             <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart size={20} className="text-foreground hover:text-mint-500" />
-              {cartItems.length > 0 && (
-                <span
-                  className={`absolute -top-1 -right-1 bg-mint-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center cart-bubble ${
-                    isCartAnimating ? 'animate' : ''
-                  }`}
-                >
-                  {cartItems.length}
-                </span>
-              )}
+              <Link to="/cart">
+                <ShoppingCart size={20} className="text-foreground hover:text-mint-500" />
+                {totalItems > 0 && (
+                  <span
+                    className={`absolute -top-1 -right-1 bg-mint-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center cart-bubble ${
+                      isCartAnimating ? 'animate' : ''
+                    }`}
+                  >
+                    {totalItems}
+                  </span>
+                )}
+              </Link>
             </Button>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center space-x-4">
+            <Button variant="ghost" size="icon" onClick={() => setIsSearchOpen(true)}>
+              <Search size={20} className="text-foreground" />
+            </Button>
+            
+            <Button variant="ghost" size="icon" className="relative">
+              <Link to="/cart">
+                <ShoppingCart size={20} className="text-foreground" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-mint-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </Link>
+            </Button>
+            
             <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? (
                 <X size={24} className="text-foreground" />
@@ -113,28 +140,21 @@ const Navbar = ({ cartItems = [] }: { cartItems?: any[] }) => {
                 About
               </Link>
               <div className="flex items-center space-x-4 pt-2">
+                <UserMenu />
+                
                 <Button variant="ghost" size="icon">
-                  <Search size={20} className="text-foreground" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <User size={20} className="text-foreground" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <Heart size={20} className="text-foreground" />
-                </Button>
-                <Button variant="ghost" size="icon" className="relative">
-                  <ShoppingCart size={20} className="text-foreground" />
-                  {cartItems.length > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-mint-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                      {cartItems.length}
-                    </span>
-                  )}
+                  <Link to="/wishlist">
+                    <Heart size={20} className="text-foreground" />
+                  </Link>
                 </Button>
               </div>
             </div>
           </div>
         )}
       </div>
+      
+      {/* Search Modal */}
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </nav>
   );
 };
